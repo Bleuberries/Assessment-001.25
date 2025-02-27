@@ -35,7 +35,7 @@ public class PlayerMovement : MonoBehaviour
         //Jumping logic
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         }
 
         //Update animaton parameters
@@ -46,7 +46,7 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         // move left and right
-        rb.velocity = new Vector2(moveInput * speed, rb.velocity.y); 
+        rb.linearVelocity = new Vector2(moveInput * speed, rb.linearVelocity.y); 
 
         //check if the player is on the ground
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
