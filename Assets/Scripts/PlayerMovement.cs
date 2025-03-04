@@ -12,6 +12,7 @@ public class PlayerMovement : MonoBehaviour
     private Animator animator; //Reference to animator 
     public Transform groundCheck; 
     public LayerMask groundLayer;
+    bool isJumping;
 
     
    
@@ -33,10 +34,7 @@ public class PlayerMovement : MonoBehaviour
             transform.localScale = new Vector3(-1, 1, 1);
         
         //Jumping logic
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
-        {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-        }
+        isJumping = Input.GetKeyDown(KeyCode.Space) && isGrounded;
 
         //Update animaton parameters
         animator.SetFloat("Speed", Mathf.Abs(moveInput));
@@ -46,7 +44,9 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         // move left and right
-        rb.linearVelocity = new Vector2(moveInput * speed, rb.linearVelocity.y); 
+        Vector2 targetVelocity = new Vector2(moveInput * speed, rb.linearVelocity.y)
+        if (isJumping) {targetVelocity += (Vector2.Up * jumpForce)}
+        rb.linearVelocity = targetVelocity Vector2(moveInput * speed, rb.linearVelocity.y) + (Vector2.Up * jumpForce);
 
         //check if the player is on the ground
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
