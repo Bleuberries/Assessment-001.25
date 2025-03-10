@@ -46,7 +46,7 @@ public class PlayerMovement : MonoBehaviour
         // move left and right
         Vector2 targetVelocity = new Vector2(moveInput * speed, rb.linearVelocity.y)
         if (isJumping) {targetVelocity += (Vector2.Up * jumpForce)}
-        rb.linearVelocity = targetVelocity Vector2(moveInput * speed, rb.linearVelocity.y) + (Vector2.Up * jumpForce);
+        rb.targetVelocity = new Vector2(moveInput * speed, rb.linearVelocity.y) + (Vector2.Up * jumpForce);
 
         //check if the player is on the ground
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
