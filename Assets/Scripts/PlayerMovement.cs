@@ -4,54 +4,57 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float speed = 5f; // speed of movement 
-    public float jumpForce = 8f; // jump strength
+    public float speed = 5f; // Speed of movement 
+    public float performJump = 8f; // Jump strength
     private float moveInput; 
     private bool isGrounded; 
     private Rigidbody2D rb;
-    private Animator animator; //Reference to animator 
+    private Animator animator; // Reference to animator 
     public Transform groundCheck; 
     public LayerMask groundLayer;
-    bool isJumping;
 
-    
-   
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>(); // get Rigidbody component
-        animator = GetComponent<Animator>(); //Get Animator component
+        rb = GetComponent<Rigidbody2D>(); // Get Rigidbody component
+        animator = GetComponent<Animator>(); // Get Animator component
     }
 
     void Update()
     {
-        //Get left and right input 
+        // Get left and right input 
         moveInput = Input.GetAxis("Horizontal"); 
 
-        //Flip sprite direction based on movement
+        // Flip sprite direction based on movement
         if (moveInput > 0)
             transform.localScale = new Vector3(1, 1, 1);
         else if (moveInput < 0)
             transform.localScale = new Vector3(-1, 1, 1);
         
-        //Jumping logic
-        isJumping = Input.GetKeyDown(KeyCode.Space) && isGrounded;
+        // Jumping logic
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        {
+            PerformJump(); 
+        }
 
-        //Update animaton parameters
+        // Update animation parameters
         animator.SetFloat("Speed", Mathf.Abs(moveInput));
         animator.SetBool("isGrounded", isGrounded);
     }
 
     void FixedUpdate()
     {
-        // move left and right
-        Vector2 targetVelocity = new Vector2(moveInput * speed, rb.linearVelocity.y)
-        if (isJumping) {targetVelocity += (Vector2.Up * jumpForce)}
-        rb.targetVelocity = new Vector2(moveInput * speed, rb.linearVelocity.y) + (Vector2.Up * jumpForce);
+        // Move left and right
+        rb.linearVelocity = new Vector2(moveInput * speed, rb.linearVelocity.y); // Fixed here
 
-        //check if the player is on the ground
+        // Check if the player is on the ground
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
 
-        //Debug to check if GroundCheck is working
+        // Debug to check if GroundCheck is working
         Debug.Log("IsGrounded: " + isGrounded);
+    }
+
+    private void PerformJump()
+    {
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, performJump); // Fixed here
     }
 }
